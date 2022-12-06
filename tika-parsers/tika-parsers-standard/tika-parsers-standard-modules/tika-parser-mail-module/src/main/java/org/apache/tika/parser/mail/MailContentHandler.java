@@ -133,6 +133,7 @@ class MailContentHandler implements ContentHandler {
     private Stack<BodyDescriptor> parts = new Stack<>();
     private final String uuid = UUID.randomUUID().toString();
     private final String UUID_FIELD = "FL-UUID";
+    private final String IS_ROOT_PART = "FL-ROOT-PART";
     MailContentHandler(XHTMLContentHandler xhtml, Detector detector, Metadata metadata,
                        ParseContext context, boolean strictParsing,
                        boolean extractAllAlternatives) {
@@ -142,6 +143,7 @@ class MailContentHandler implements ContentHandler {
         this.strictParsing = strictParsing;
         this.extractAllAlternatives = extractAllAlternatives;
         metadata.set(UUID_FIELD, uuid);
+        metadata.set(IS_ROOT_PART, String.valueOf(true));
 
         // Fetch / Build an EmbeddedDocumentExtractor with which
         //  to handle/process the parts/attachments
@@ -198,6 +200,7 @@ class MailContentHandler implements ContentHandler {
 
         Metadata submd = new Metadata();
         submd.set(UUID_FIELD, this.uuid);
+        submd.set(IS_ROOT_PART, String.valueOf(true));
         submd.set(Metadata.CONTENT_TYPE, body.getMimeType());
         submd.set(Metadata.CONTENT_ENCODING, body.getCharset());
 

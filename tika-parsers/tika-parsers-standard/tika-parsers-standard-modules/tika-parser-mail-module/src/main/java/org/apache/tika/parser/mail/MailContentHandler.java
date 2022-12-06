@@ -25,14 +25,8 @@ import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -137,6 +131,8 @@ class MailContentHandler implements ContentHandler {
     //keeps track of multipart/alternative and its children
     private Stack<Part> alternativePartBuffer = new Stack<>();
     private Stack<BodyDescriptor> parts = new Stack<>();
+    private final String uuid = UUID.randomUUID().toString();
+    private final String UUID_FIELD = "FL-UUID";
     MailContentHandler(XHTMLContentHandler xhtml, Detector detector, Metadata metadata,
                        ParseContext context, boolean strictParsing,
                        boolean extractAllAlternatives) {
@@ -145,6 +141,7 @@ class MailContentHandler implements ContentHandler {
         this.parseContext = context;
         this.strictParsing = strictParsing;
         this.extractAllAlternatives = extractAllAlternatives;
+        metadata.set(UUID_FIELD, uuid);
 
         // Fetch / Build an EmbeddedDocumentExtractor with which
         //  to handle/process the parts/attachments
@@ -200,6 +197,7 @@ class MailContentHandler implements ContentHandler {
         // sub part without damaging the main metadata
 
         Metadata submd = new Metadata();
+        submd.set(UUID_FIELD, this.uuid);
         submd.set(Metadata.CONTENT_TYPE, body.getMimeType());
         submd.set(Metadata.CONTENT_ENCODING, body.getCharset());
 

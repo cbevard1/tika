@@ -200,7 +200,7 @@ class MailContentHandler implements ContentHandler {
 
         Metadata submd = new Metadata();
         submd.set(UUID_FIELD, this.uuid);
-        submd.set(IS_ROOT_PART, String.valueOf(true));
+        submd.set(IS_ROOT_PART, String.valueOf(false));
         submd.set(Metadata.CONTENT_TYPE, body.getMimeType());
         submd.set(Metadata.CONTENT_ENCODING, body.getCharset());
 
